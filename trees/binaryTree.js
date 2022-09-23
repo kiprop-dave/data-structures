@@ -40,6 +40,11 @@ class BinaryTree{
         }
         
     }
+    
+    size(){
+        const treeSize = inOrder(this.root)
+        return treeSize.length;
+    }
 
     contains(value){ // check if a value is in the tree
         if(this.root.value === value){
@@ -157,28 +162,34 @@ class BinaryTree{
     }
 }
 
+const data = [20,30,10,15,17,40,45,5,3,19,35,46,50,55,49];
 const treeTest = new BinaryTree()
 
-treeTest.add(50);
-treeTest.add(30);
-treeTest.add(99);
-treeTest.add(4);
-treeTest.add(41);
-treeTest.add(33);
-treeTest.add(73);
-treeTest.add(160)
-treeTest.add(42);
-treeTest.add(25);
-treeTest.add(31);
-treeTest.add(150)
-treeTest.add(43)
+// treeTest.add(50);
+// treeTest.add(30);
+// treeTest.add(99);
+// treeTest.add(4);
+// treeTest.add(41);
+// treeTest.add(33);
+// treeTest.add(73);
+// treeTest.add(160)
+// treeTest.add(42);
+// treeTest.add(25);
+// treeTest.add(31);
+// treeTest.add(150)
+// treeTest.add(43)
 
+for (const i of data){
+    treeTest.add(i);
+}
+
+// console.log(treeTest.size());
 // console.log(treeTest.findMax(treeTest.root))
 
 // console.log(treeTest.root)
 // treeTest.deletion(25);
-treeTest.deletion(41);
-console.log(treeTest.contains(41))
+// treeTest.deletion(41);
+// console.log(treeTest.contains(41))
 
 function postOrder(node){ // post-Order traversal
     if(node === null){
@@ -233,9 +244,36 @@ function preOrder(node){ // pre-order traversal
     return elements;
 }
 
+function levelOrder(node){  // level order or breadth first search
+    if(node === null){
+        return [];
+    }
+    const queue = [];
+    
+    queue.push(node);
+    
+    const elements = [];
+
+    while(queue.length !== 0){
+        const firstInQueue = queue.shift();
+        elements.push(firstInQueue.value);
+
+        if(firstInQueue.left !==null){
+            queue.push(firstInQueue.left);
+        }
+
+        if(firstInQueue.right !== null){
+            queue.push(firstInQueue.right);
+        }
+    }
+    return elements;
+}
+
 // const postTraversal = postOrder(treeTest.root);
 // console.log(postTraversal)
 // const inOrderTrav = inOrder(treeTest.root);
 // console.log(inOrderTrav);
 // const preOrderTrav = preOrder(treeTest.root);
 // console.log(preOrderTrav);
+// const level = levelOrder(treeTest.root);
+// console.log(level);
