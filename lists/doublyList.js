@@ -90,12 +90,30 @@ class DoublyList{
         }
     }
 
+    reverse(){ // method to reverse the list
+        if(!this.head){
+            return null;
+        }
+        let currentNode = this.tail;
+        
+        while(currentNode){
+            let next = currentNode.next;
+            currentNode.next = currentNode.previous;
+            currentNode.previous = next;
+
+            currentNode = currentNode.next;
+        }
+        let temp = this.head;
+        this.head = this.tail;
+        this.tail = temp;
+    }
+
     toArray(){
         const elements = [];
 
         let currentNode = this.head;
         while(currentNode){
-            elements.push(currentNode);
+            elements.push(currentNode.value);
             currentNode = currentNode.next;
         }
 
@@ -103,15 +121,15 @@ class DoublyList{
     }
 }
 
+const dataSet = [1,2,3,4,5,6,7,8,9,10,11,12];
 const doublyTest = new DoublyList()
-doublyTest.append(1)
-doublyTest.append(2)
-doublyTest.append('another')
-doublyTest.append(true)
-doublyTest.append('David')
-doublyTest.prepend('first')
-// doublyTest.delete('David')
-doublyTest.insertAfter('inserted here','another')
 
-console.log(doublyTest.toArray())
+for (const el of dataSet){
+    doublyTest.append(el);
+}
+// doublyTest.insertAfter('inserted here','another')
+console.log(doublyTest.toArray());
+doublyTest.reverse();
+
+console.log(doublyTest.toArray());
 // console.log(doublyTest.find(true))

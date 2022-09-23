@@ -80,12 +80,29 @@ class LinkedList{
         }
     }
 
+    reverse(){ // method to reverse the list
+        let previous = null;
+        let currentNode = this.head;
+        let next = null;
+        
+        while(currentNode){
+            next = currentNode.next;
+            currentNode.next = previous;
+            previous = currentNode;
+            currentNode = next;
+        }
+
+        let temp = this.head;
+        this.head = this.tail;
+        this.tail = temp;
+    }
+
     toArray(){ // This is amethod to convert the linked list to an array
         const allElements = [] // initialize an empty array to store the values of the linked list
 
         let currentNode = this.head // store the head of the list
         while(currentNode){ //Only run when there is a currentNode
-            allElements.push(currentNode) // push elemnt to the array
+            allElements.push(currentNode.value) // push elemnt to the array
             currentNode = currentNode.next // update the current node to the next pointer
         }
 
@@ -94,18 +111,25 @@ class LinkedList{
 
 }
 
-const listTest = new LinkedList()
-listTest.append('David')
-listTest.append(1)
-listTest.append('David')
-listTest.append(true)
-listTest.append('David')
-listTest.append(13.8)
-listTest.append('David')
-listTest.prepend(12)
+const dataSet = [1,2,3,4,5,6,7,8,9,10,11,12];
+const listTest = new LinkedList();
+
+for (const el of dataSet){
+    listTest.append(el);
+}
+// listTest.append('David')
+// listTest.append(1)
+// listTest.append('David')
+// listTest.append(true)
+// listTest.append('David')
+// listTest.append(13.8)
+// listTest.append('David')
+// listTest.prepend(12)
 // listTest.insertAfter('David',12)
 // listTest.delete('David')
 // listTest.delete(13.8)
 // listTest.delete(12)
-
-console.log(listTest.find('David'))
+// console.log(listTest.find('David'))
+console.log(listTest.toArray())
+listTest.reverse()
+console.log(listTest.toArray())
