@@ -9,7 +9,8 @@ class BinaryTree{
         const newNode = {
             value: value,
             left: null,
-            right: null
+            right: null,
+            parentNode: null
         }
 
         if(!this.root){
@@ -20,6 +21,7 @@ class BinaryTree{
             while(currentNode){
                 if(value >= currentNode.value){
                     if(currentNode.right === null){
+                        newNode.parentNode = currentNode;
                         currentNode.right = newNode;
                         return
                     }else{
@@ -27,6 +29,7 @@ class BinaryTree{
                     }
                 }else{
                     if(currentNode.left === null){
+                        newNode.parentNode = currentNode;
                         currentNode.left = newNode;
                         return
                     }else{
@@ -62,11 +65,95 @@ class BinaryTree{
         return false;
     }
 
-    deletion(value){
+    deletion(value){ // method to delete a node
         const isThere = this.contains(value);
         if(isThere){
+            if(isThere.node.left === null && isThere.node.right === null){ //deleting a leaf
+                if(isThere.node.parentNode.left !==null && isThere.node.parentNode.left.value === value){ 
+                    isThere.node.parentNode.left = null;
+                }
+                if(isThere.node.parentNode.right !==null && isThere.node.parentNode.right.value === value){
+                    isThere.node.parentNode.right = null;
+                }
+            }
+            if(isThere.node.left !== null && isThere.node.right === null){ // deleting node with one left child
+                if(isThere.node.parentNode.left !==null && isThere.node.parentNode.left.value === value){
+                    isThere.node.left.parentNode = isThere.node.parentNode;
+                    isThere.node.parentNode.left = isThere.node.left;
+                }
+                if(isThere.node.parentNode.right !==null && isThere.node.parentNode.right.value === value){
+                    isThere.node.left.parentNode = isThere.node.parentNode;
+                    isThere.node.parentNode.right = isThere.node.left;
+                }
+            }
+            if(isThere.node.right !== null && isThere.node.left === null){ // deleting node with one right child
+                if(isThere.node.parentNode.left !==null && isThere.node.parentNode.left.value === value){
+                    isThere.node.right.parentNode = isThere.node.parentNode;
+                    isThere.node.parentNode.left = isThere.node.right;
+                }
+                if(isThere.node.parentNode.right !==null && isThere.node.parentNode.right.value === value){
+                    isThere.node.right.parentNode = isThere.node.parentNode;
+                    isThere.node.parentNode.right = isThere.node.right;
+                }
+            }
+            if(isThere.node.right !== null && isThere.node.left !== null){ // deleting node with left and right children
+                const minNode = this.findMin(isThere.node.right);
+                if(minNode.right === null){
 
+                    minNode.parentNode.left = minNode.right;
+                    minNode.left = isThere.node.left;
+                    minNode.right = isThere.node.right;
+                    minNode.parentNode = isThere.node.parentNode;
+                    if(isThere.node.parentNode !== null && isThere.node.parentNode.left.value === isThere.node.value){
+                        isThere.node.parentNode.left = minNode;
+                    }
+                    if(isThere.node.parentNode !== null && isThere.node.parentNode.right.value === isThere.node.value){
+                        isThere.node.parentNode.right = minNode;
+                    }
+                    isThere.node.left.parentNode = minNode;
+                    isThere.node.right.parentNode = minNode;
+                    isThere.node = minNode;
+                }
+                if(minNode.right !== null){
+                    if(isThere.node.parentNode !== null && isThere.node.parentNode.left.value === isThere.node.value){
+                        isThere.node.parentNode.left = minNode;
+                    }
+                    if(isThere.node.parentNode !== null && isThere.node.parentNode.right.value === isThere.node.value){
+                        isThere.node.parentNode.right = minNode;
+                    }
+                    minNode.left = isThere.node.left;
+                    minNode.parentNode = isThere.node.parentNode;
+                    isThere.node.left.parentNode = minNode;
+                }
+            }
+        }else{
+            return 'Value not present';
         }
+    }
+
+    findMin(node){ // method to find the minimum node
+        if(node === null){
+            return null;
+        }
+        
+        let currentNode = node;
+        while(currentNode.left !==null){
+            currentNode = currentNode.left;
+        }
+        return currentNode;
+
+    }
+
+    findMax(node){ // method to find the maximum node
+        if(node === null){
+            return null;
+        }
+        let currentNode = node;
+        while(currentNode.right !== null){
+            currentNode = currentNode.right
+        }
+
+        return currentNode;
     }
 }
 
@@ -82,8 +169,16 @@ treeTest.add(73);
 treeTest.add(160)
 treeTest.add(42);
 treeTest.add(25);
+treeTest.add(31);
+treeTest.add(150)
+treeTest.add(43)
 
-// console.log(treeTest.contains(30))
+// console.log(treeTest.findMax(treeTest.root))
+
+// console.log(treeTest.root)
+// treeTest.deletion(25);
+treeTest.deletion(41);
+console.log(treeTest.contains(41))
 
 function postOrder(node){ // post-Order traversal
     if(node === null){
