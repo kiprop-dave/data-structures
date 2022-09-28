@@ -15,6 +15,24 @@ class AdjacencyList {
         this.adjList.get(vertex2).push(vertex1);
     }
 
+    deleteVertex(vertex){
+        const vertexEdges = this.adjList.get(vertex);
+
+        for(const vedge of vertexEdges){
+            const newEdgeList = this.adjList.get(vedge).filter(item => item !== vertex);
+            this.adjList.set(vedge,newEdgeList);
+        }
+        this.adjList.delete(vertex);
+        this.noOfVertices = this.noOfVertices - 1;
+    }
+
+    deleteEdge(vertex1,vertex2){
+        const newVertex1 = this.adjList.get(vertex1).filter(item => item !== vertex2);
+        const newVertex2 = this.adjList.get(vertex2).filter(item => item !== vertex1);
+        this.adjList.set(vertex1,newVertex1);
+        this.adjList.set(vertex2,newVertex2);
+    }
+
     bfs(vertex, target){ // method for breadth first search
         const visitedVertex = new Set(); // keeps track of the visited vertices
         const queue = [vertex];
@@ -74,41 +92,49 @@ class AdjacencyList {
 
 }
 
-// const vertices = ['A','B','C','D','E','F','G','H'];
-// const adjacencyList = new AdjacencyList(8);
+const vertices = ['A','B','C','D','E','F','G','H'];
+const edges = [
+    ['A','B'],
+    ['A','C'],
+    ['A','D'],
+    ['B','E'],
+    ['B','F'],
+    ['C','G'],
+    ['D','H'],
+    ['E','H'],
+    ['F','H'],
+    ['G','H']
+]
+const adjacencyList = new AdjacencyList(8);
 
-// for(const el of vertices){
-//     adjacencyList.addVertex(el);
-// }
-// adjacencyList.addEdge('A','B');
-// adjacencyList.addEdge('A','C');
-// adjacencyList.addEdge('A','D');
-// adjacencyList.addEdge('B','E');
-// adjacencyList.addEdge('B','F');
-// adjacencyList.addEdge('C','G');
-// adjacencyList.addEdge('D','H');
-// adjacencyList.addEdge('E','H');
-// adjacencyList.addEdge('F','H');
-// adjacencyList.addEdge('G','H');
+vertices.forEach(vertex => adjacencyList.addVertex(vertex));
+edges.forEach(edgePair => adjacencyList.addEdge(edgePair[0],edgePair[1]));
 
+
+console.log(adjacencyList);
+// console.log(adjacencyList.deleteEdge('A','B'));
+adjacencyList.deleteVertex('A');
+console.log(adjacencyList);
 // console.log(adjacencyList.printGraph());
-// console.log(adjacencyList);
 // console.log(adjacencyList.bfs('C','B'));
 // console.log(adjacencyList.dfs('A','H'));
-const airports = 'PHX BKK OKC JFK LAX MEX EZE HEL LOS LAP LIM'.split(' ');
-const routes = [
-    ['PHX', 'LAX'],
-    ['PHX', 'JFK'],
-    ['JFK', 'OKC'],
-    ['JFK', 'HEL'],
-    ['JFK', 'LOS'],
-    ['MEX', 'LAX'],
-    ['MEX', 'BKK'],
-    ['MEX', 'LIM'],
-    ['MEX', 'EZE'],
-    ['LIM', 'BKK'],
-];
-const adjList = new AdjacencyList(11);
-airports.forEach(airport => adjList.addVertex(airport));
-routes.forEach((route => adjList.addEdge(route[0],route[1])))
-console.log(adjList.bfs('PHX','BKK'));
+
+
+
+// const airports = 'PHX BKK OKC JFK LAX MEX EZE HEL LOS LAP LIM'.split(' ');
+// const routes = [
+//     ['PHX', 'LAX'],
+//     ['PHX', 'JFK'],
+//     ['JFK', 'OKC'],
+//     ['JFK', 'HEL'],
+//     ['JFK', 'LOS'],
+//     ['MEX', 'LAX'],
+//     ['MEX', 'BKK'],
+//     ['MEX', 'LIM'],
+//     ['MEX', 'EZE'],
+//     ['LIM', 'BKK'],
+// ];
+// const adjList = new AdjacencyList(11);
+// airports.forEach(airport => adjList.addVertex(airport));
+// routes.forEach((route => adjList.addEdge(route[0],route[1])))
+// console.log(adjList.bfs('PHX','BKK'));
